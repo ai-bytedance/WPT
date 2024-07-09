@@ -29,7 +29,7 @@
    
 ![关联数据](https://github.com/ai-bytedance/WPT/assets/171111554/641b7e86-1550-4320-b66c-a8b2f6d42a65)
 
-- 项目还可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
+- 项目可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
   
 ![甘特图 看板](https://github.com/ai-bytedance/WPT/assets/171111554/33a75a48-6bf0-4fa3-a771-11bab8cb25e3)
 
@@ -46,8 +46,14 @@
   
 ![需求-分配流转](https://github.com/ai-bytedance/WPT/assets/171111554/ab0ef036-b815-4d80-8088-e7b0f49a2f28)
 
-
+- 需求可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
+  
 ![需求-甘特 看板](https://github.com/ai-bytedance/WPT/assets/171111554/1d846177-fb1d-4be4-ae04-87530476e859)
+
+## 任务
+
+## 缺陷
+## 用例
 
 
 
