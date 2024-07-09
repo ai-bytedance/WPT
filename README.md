@@ -34,10 +34,19 @@
 ![甘特图 看板](https://github.com/ai-bytedance/WPT/assets/171111554/33a75a48-6bf0-4fa3-a771-11bab8cb25e3)
 
 ## 需求
+- 在需求模块下，填写需求表单中必要的信息后，就完成了一个需求的创建，选择了需求的“参与方”后，需要参与方的人员在【计划】详情对排期计划进行规划和填写。如下图所示：
+  
 ![新建需求](https://github.com/ai-bytedance/WPT/assets/171111554/c2327589-2231-4507-80fe-c908372fb09b)
-![修改需求](https://github.com/ai-bytedance/WPT/assets/171111554/c7d082e1-6143-4fd0-b81d-97438333bc17)
+
+- 在需求列表中进入任意一个需求的【详细数据】详情页面，可以直观的看到这个需求下所有“关联的任务”、“关联的需求”及基本信息数据。如下图所示：
+  
 ![需求-关联数据](https://github.com/ai-bytedance/WPT/assets/171111554/3d9c6fe3-63d5-4f92-a41c-a5e6db7d875f)
+
+- 当需求需要进行“状态”或“人员”的分配或流转的时候，可以通过需求列表中【分配/流转】功能进行完成，如下图所示：
+  
 ![需求-分配流转](https://github.com/ai-bytedance/WPT/assets/171111554/ab0ef036-b815-4d80-8088-e7b0f49a2f28)
+
+
 ![需求-甘特 看板](https://github.com/ai-bytedance/WPT/assets/171111554/1d846177-fb1d-4be4-ae04-87530476e859)
 
 
