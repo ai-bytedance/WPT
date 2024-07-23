@@ -1,7 +1,7 @@
 <hr style="border: 2px solid black;">
 
 # 联系我们
-- 如你有更多问题，可以添加作者微信，进入技术交流群与我们交流。
+- 如你有更多问题，可以添加作者微信，进行交流。
 
 ![wx](https://github.com/ai-bytedance/WPT/assets/171111554/ba5dc1f8-158e-4fbe-9ed2-5d45bdee098d)
 
@@ -57,6 +57,10 @@
 - 当需求需要进行“状态”或“人员”的分配或流转的时候，可以通过需求列表中【分配/流转】功能进行完成，如下图所示：
   
 ![需求-分配流转](https://github.com/ai-bytedance/WPT/assets/171111554/ab0ef036-b815-4d80-8088-e7b0f49a2f28)
+
+- 进入需求的排期详情，如果又参与方没有填写具体的排期，可以通过【催排期】功能通知参与方的负责人和需求的总负责人，如下图所示：
+  
+  ![图片](https://github.com/user-attachments/assets/61cb8f7e-091a-49df-8f40-41d220c399e3)
 
 - 需求可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
   
