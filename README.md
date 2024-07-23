@@ -58,16 +58,30 @@
   
 ![需求-分配流转](https://github.com/ai-bytedance/WPT/assets/171111554/ab0ef036-b815-4d80-8088-e7b0f49a2f28)
 
-- 进入需求的排期详情，如果又参与方没有填写具体的排期，可以通过【催排期】功能通知参与方的负责人和需求的总负责人，如下图所示：
+- 进入需求的排期详情，如果有参与方没有填写具体的排期，可以通过【催排期】功能通知参与方的负责人和需求的总负责人，如下图所示：
   
-  ![图片](https://github.com/user-attachments/assets/61cb8f7e-091a-49df-8f40-41d220c399e3)
+![需求-催排期](https://github.com/user-attachments/assets/7a21357f-f7ee-40e1-8d81-e3d90e6926a4)
+
 
 - 需求可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
   
 ![需求-甘特 看板](https://github.com/ai-bytedance/WPT/assets/171111554/1d846177-fb1d-4be4-ae04-87530476e859)
 
 ## 任务
-待完善
+- 在任务模块下，填写任务表单中必要的信息后，就完成了一个任务的创建，如下图所示：
+
+  ![任务-添加任务](https://github.com/user-attachments/assets/22b08f08-1888-486c-826b-4efde5571711)
+
+- 在任务列表中进入任意一个任务的【详细数据】详情页面，可以直观的看到这个任务下所“关联的需求”及基本信息数据。如下图所示：
+
+  ![任务-关联数据](https://github.com/user-attachments/assets/46b5152d-eebb-4bfb-a98d-efac27401371)
+
+- 任务可以通过“甘特图”、“看板”两种方式进行管理和查看。如下图所示：
+
+  ![任务-甘特 看板](https://github.com/user-attachments/assets/a1db0e06-d13b-45c4-a04d-fce0764109e1)
+
+
+
 
 ## 缺陷
 待完善
