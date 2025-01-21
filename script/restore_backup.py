@@ -12,10 +12,10 @@ DATABASE_NAME = "wpt"
 BACKUP_DIR = "/opt/wpt"
 TARGET_STORAGE_DIR = "/app/storage"  # 目标存储目录
 
-def restore_database(backup_file):
+def restore_database(database_backup_path):
     """还原数据库"""
-    if not os.path.exists(backup_file):
-        print(f"错误：数据库备份文件不存在：{backup_file}")
+    if not os.path.exists(database_backup_path):
+        print(f"错误：数据库备份文件不存在：{database_backup_path}")
         return False
 
     restore_command = [
@@ -27,9 +27,9 @@ def restore_database(backup_file):
         "--databases", DATABASE_NAME
     ]
 
-    print(f"正在还原数据库从 {backup_file}...")
+    print(f"正在还原数据库从 {database_backup_path}...")
     try:
-        with open(backup_file, 'r') as f:
+        with open(database_backup_path, 'r') as f:
             subprocess.run(restore_command, stdin=f, check=True)
         print("数据库还原完成")
         return True
@@ -66,12 +66,12 @@ def restore_storage(backup_folder):
 
 def main():
     # 使用固定的备份文件路径
-    db_backup_path = "/app/wpt/wpt_database_backup.sql"
+    database_backup_path = "/app/wpt/wpt_database_backup.sql"
     storage_backup_path = "/app/wpt/storage"
     
     # 检查备份文件是否存在
-    if not os.path.exists(db_backup_path):
-        print(f"错误：数据库备份文件不存在：{db_backup_path}")
+    if not os.path.exists(database_backup_path):
+        print(f"错误：数据库备份文件不存在：{database_backup_path}")
         return
         
     if not os.path.exists(storage_backup_path):
@@ -79,7 +79,7 @@ def main():
         return
     
     # 执行还原操作
-    if restore_database(db_backup_path):
+    if restore_database(database_backup_path):
         restore_storage(storage_backup_path)
 
 if __name__ == "__main__":
