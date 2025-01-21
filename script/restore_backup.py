@@ -6,82 +6,81 @@ from datetime import datetime
 # 配置
 MYSQL_USER = "root"
 MYSQL_PASSWORD = "password"
-MYSQL_HOST = "xx.xx.xx.xx"
+MYSQL_HOST = "xx.xx.xx.xx"  # 目标服务器
 MYSQL_PORT = "3306"
-DATABASE_NAME = "wpt"  # 需要还原的数据库名称
-BACKUP_DIR = "/opt/wpt"  # 数据库和文件备份的存放目录
-TARGET_APP_DIR = "/opt/app"  # 目标应用路径，假设是 /opt/app
-SOURCE_STORAGE_DIR = "/wpt/storage"  # 源存储路径，假设是 /wpt/storage
-STORAGE_DIR = os.path.join(TARGET_APP_DIR, "storage")  # 目标 storage 目录
-BACKUP_STORAGE_DIR = os.path.join(TARGET_APP_DIR, "storage-bak")  # 存储备份的目录
-MYSQL_BACKUP_FILE = f"{BACKUP_DIR}/wpt_database_backup.sql"  # MySQL 备份文件路径
-DATE_FORMAT = "%Y%m%d%H%M%S"  # 时间格式
-STORAGE_BACKUP_TIMESTAMP = datetime.now().strftime(DATE_FORMAT)
+DATABASE_NAME = "wpt"
+BACKUP_DIR = "/opt/wpt"
+TARGET_STORAGE_DIR = "/app/storage"  # 目标存储目录
 
-# 生成备份文件名
-def generate_backup_filename(prefix, extension="sql"):
-    timestamp = datetime.now().strftime(DATE_FORMAT)
-    return f"{BACKUP_DIR}/{prefix}_{timestamp}.{extension}"
+def restore_database(backup_file):
+    """还原数据库"""
+    if not os.path.exists(backup_file):
+        print(f"错误：数据库备份文件不存在：{backup_file}")
+        return False
 
-# 还原 MySQL 数据库
-def restore_database():
-    if not os.path.exists(MYSQL_BACKUP_FILE):
-        print(f"备份文件 {MYSQL_BACKUP_FILE} 不存在，无法还原数据库！")
-        return
-    
-    print(f"正在还原数据库 {DATABASE_NAME}... 使用备份文件 {MYSQL_BACKUP_FILE}")
     restore_command = [
         "mysql",
         "-u", MYSQL_USER,
         f"-p{MYSQL_PASSWORD}",
         "-h", MYSQL_HOST,
         "-P", MYSQL_PORT,
-        DATABASE_NAME,
-        "<", MYSQL_BACKUP_FILE
+        "--databases", DATABASE_NAME
     ]
-    
+
+    print(f"正在还原数据库从 {backup_file}...")
     try:
-        subprocess.run(' '.join(restore_command), shell=True, check=True)
-        print(f"数据库 {DATABASE_NAME} 还原完成！")
+        with open(backup_file, 'r') as f:
+            subprocess.run(restore_command, stdin=f, check=True)
+        print("数据库还原完成")
+        return True
     except subprocess.CalledProcessError as e:
-        print(f"数据库还原失败: {e}")
+        print(f"数据库还原失败：{str(e)}")
+        return False
 
-# 备份 storage 文件夹
-def backup_storage():
-    # 确保备份目录存在
-    if not os.path.exists(BACKUP_STORAGE_DIR):
-        os.makedirs(BACKUP_STORAGE_DIR)
+def restore_storage(backup_folder):
+    """还原存储文件"""
+    if not os.path.exists(backup_folder):
+        print(f"错误：存储备份目录不存在：{backup_folder}")
+        return False
 
-    print(f"正在备份 {STORAGE_DIR} 到 {BACKUP_STORAGE_DIR}...")
-    
-    # 使用 shutil 备份 storage 目录
-    backup_folder = f"{BACKUP_STORAGE_DIR}/storage_backup_{STORAGE_BACKUP_TIMESTAMP}"
+    print(f"正在还原存储文件从 {backup_folder} 到 {TARGET_STORAGE_DIR}...")
     try:
-        shutil.copytree(STORAGE_DIR, backup_folder)
-        print(f"storage 备份完成：{backup_folder}")
-    except shutil.Error as e:
-        print(f"存储目录备份失败: {e}")
-
-# 覆盖目标 storage 文件夹
-def overwrite_storage():
-    if os.path.exists(STORAGE_DIR):
-        print(f"将 {STORAGE_DIR} 重命名为 {STORAGE_DIR}_bak")
-        os.rename(STORAGE_DIR, f"{STORAGE_DIR}_bak")  # 备份原有的 storage 文件夹
-    
-    print(f"正在将 {SOURCE_STORAGE_DIR} 复制到 {STORAGE_DIR}...")
-    try:
-        shutil.copytree(SOURCE_STORAGE_DIR, STORAGE_DIR)
-        print(f"{SOURCE_STORAGE_DIR} 内容已成功复制到 {STORAGE_DIR}")
+        # 确保目标目录存在
+        os.makedirs(TARGET_STORAGE_DIR, exist_ok=True)
+        
+        # 复制所有文件和目录
+        for item in os.listdir(backup_folder):
+            src = os.path.join(backup_folder, item)
+            dst = os.path.join(TARGET_STORAGE_DIR, item)
+            
+            if os.path.isdir(src):
+                shutil.copytree(src, dst, dirs_exist_ok=True)
+            else:
+                shutil.copy2(src, dst)
+                
+        print("存储文件还原完成")
+        return True
     except Exception as e:
-        print(f"存储目录复制失败: {e}")
+        print(f"存储文件还原失败：{str(e)}")
+        return False
 
-# 执行恢复操作
-def restore_application():
-    print(f"开始恢复应用程序：{TARGET_APP_DIR}")
-    backup_storage()  # 备份当前 storage
-    restore_database()  # 还原数据库
-    overwrite_storage()  # 替换目标 storage 文件夹
-    print(f"应用程序恢复完成！目标路径：{TARGET_APP_DIR}")
+def main():
+    # 使用固定的备份文件路径
+    db_backup_path = "/app/wpt/wpt_database_backup.sql"
+    storage_backup_path = "/app/wpt/storage"
+    
+    # 检查备份文件是否存在
+    if not os.path.exists(db_backup_path):
+        print(f"错误：数据库备份文件不存在：{db_backup_path}")
+        return
+        
+    if not os.path.exists(storage_backup_path):
+        print(f"错误：存储备份目录不存在：{storage_backup_path}") 
+        return
+    
+    # 执行还原操作
+    if restore_database(db_backup_path):
+        restore_storage(storage_backup_path)
 
 if __name__ == "__main__":
-    restore_application()
+    main()
