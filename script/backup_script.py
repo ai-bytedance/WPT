@@ -69,10 +69,47 @@ def backup_directory():
 
     print(f"文件夹备份完成：{backup_folder}")
 
+# 将备份文件打包成压缩包
+def create_backup_archive():
+    timestamp = datetime.now().strftime(DATE_FORMAT)
+    archive_name = f"{BACKUP_DIR}/wpt_backup_{timestamp}.tar.gz"
+    
+    print(f"正在创建备份压缩包 {archive_name}...")
+    
+    # 获取最新的备份文件和文件夹
+    backup_files = []
+    for item in os.listdir(BACKUP_DIR):
+        item_path = os.path.join(BACKUP_DIR, item)
+        if os.path.isfile(item_path) and item.endswith('.sql'):
+            backup_files.append(item)
+        elif os.path.isdir(item_path) and 'storage_backup_' in item:
+            backup_files.append(item)
+    
+    # 创建压缩包
+    current_dir = os.getcwd()
+    os.chdir(BACKUP_DIR)
+    try:
+        subprocess.run(["tar", "-czf", archive_name] + backup_files, check=True)
+        print(f"备份压缩包创建完成：{archive_name}")
+        
+        # 删除已压缩的文件和文件夹
+        for item in backup_files:
+            item_path = os.path.join(BACKUP_DIR, item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+        print("已清理临时备份文件")
+    except subprocess.CalledProcessError as e:
+        print(f"创建压缩包时出错：{e}")
+    finally:
+        os.chdir(current_dir)
+
 # 执行备份操作
 def main():
     backup_database()         # 备份数据库
     backup_directory()        # 备份文件夹
+    create_backup_archive()   # 创建备份压缩包
 
 if __name__ == "__main__":
     main()
