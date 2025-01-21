@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import os
 import subprocess
 import shutil
@@ -20,16 +23,31 @@ def restore_database(sql_file):
     """还原数据库"""
     print(f"正在还原数据库从 {sql_file}...")
     
-    restore_command = [
-        "mysql",
-        "-u", MYSQL_USER,
-        f"-p{MYSQL_PASSWORD}",
-        "-h", MYSQL_HOST,
-        "-P", MYSQL_PORT,
-        "--databases", DATABASE_NAME
-    ]
-    
     try:
+        # 检查并创建数据库（如果不存在）
+        create_db_command = [
+            "mysql",
+            "-u", MYSQL_USER,
+            f"-p{MYSQL_PASSWORD}",
+            "-h", MYSQL_HOST,
+            "-P", MYSQL_PORT,
+            "-e", f"CREATE DATABASE IF NOT EXISTS {DATABASE_NAME}"
+        ]
+        
+        print("检查数据库状态...")
+        subprocess.run(create_db_command, check=True)
+        
+        # 直接导入数据（会自动覆盖同名表）
+        restore_command = [
+            "mysql",
+            "-u", MYSQL_USER,
+            f"-p{MYSQL_PASSWORD}",
+            "-h", MYSQL_HOST,
+            "-P", MYSQL_PORT,
+            DATABASE_NAME
+        ]
+        
+        print("开始导入数据...")
         with open(sql_file, 'r') as f:
             subprocess.run(restore_command, stdin=f, check=True)
         print("数据库还原完成")
@@ -79,6 +97,14 @@ def main():
     
     if not os.path.exists(args.backup_file):
         print(f"错误：备份文件 {args.backup_file} 不存在")
+        return
+    
+    # 添加提示
+    print("注意：此操作将更新现有的 wpt 数据库数据（如果存在）。")
+    print("建议在执行还原操作前先备份现有数据。")
+    confirm = input("是否继续？(y/N): ")
+    if confirm.lower() != 'y':
+        print("操作已取消")
         return
     
     try:
